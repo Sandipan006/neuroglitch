@@ -70,7 +70,7 @@ const App: React.FC = () => {
         {/* Header */}
         <header className="h-16 shrink-0 border-b border-neutral-800 bg-black/40 backdrop-blur flex items-center justify-between px-6 z-20 sticky top-0 md:relative">
              <div className="flex items-center gap-2">
-                 <div className="w-3 h-3 bg-cyan-500 rounded-full animate-pulse"></div>
+                 <img src="/logo.png" alt="NeuroGlitch Logo" className="w-6 h-6 object-contain" />
                  <h1 className="font-mono font-bold text-xl tracking-[0.2em] text-white">
                     NEURO<span className="text-cyan-400">GLITCH</span>
                  </h1>
