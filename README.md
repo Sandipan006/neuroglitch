@@ -40,7 +40,7 @@
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/neuroglitch.git
+git clone https://github.com/Sandipan006/neuroglitch.git
 cd neuroglitch
 ```
 
