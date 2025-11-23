@@ -6,18 +6,18 @@
 
 <div align="center">
   <h3>Transform images into stunning ASCII art with cyberpunk aesthetics</h3>
-  <p>AI-powered image processor that converts photos into glitchy, neon-drenched ASCII masterpieces</p>
+  <p>Image processor that converts photos into glitchy, neon-drenched ASCII masterpieces</p>
 </div>
 
 ## 🌟 Features
 
 - **ASCII Art Conversion**: Transform any image into pixel-perfect ASCII art with multiple character palettes
 - **Real-time Processing**: Adjust parameters and see changes instantly on your canvas
-- **AI Analysis**: Get cyberpunk-style interpretations of your creations using Gemini AI
 - **Multiple Color Modes**: Choose from mono, spectral, cyber, or original color schemes
 - **Particle Effects**: Add glowing particle overlays for that extra cyberpunk vibe
 - **Responsive Design**: Works beautifully on desktop and mobile devices
 - **Export Functionality**: Download your creations as high-quality PNG files
+- **No API Keys Required**: Works out of the box with no external dependencies
 
 ## 📸 Screenshots
 
@@ -35,7 +35,6 @@
 ### Prerequisites
 
 - Node.js (v18 or higher recommended)
-- A Gemini API key (optional, for AI analysis feature)
 
 ### Installation
 
@@ -50,12 +49,7 @@ cd neuroglitch
 npm install
 ```
 
-3. Create a `.env.local` file in the root directory:
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-```
-
-4. Start the development server:
+3. Start the development server:
 ```bash
 npm run dev
 ```
@@ -78,7 +72,6 @@ npm run dev
 - **TypeScript** - Type safety
 - **Vite** - Build tool and dev server
 - **Tailwind CSS** - Styling
-- **Google Gemini AI** - Image analysis
 - **HTML5 Canvas** - Image processing and rendering
 
 ## 📝 Scripts
@@ -89,13 +82,7 @@ npm run dev
 
 ## 🔧 Configuration
 
-The app uses environment variables for configuration. Create a `.env.local` file:
-
-```env
-GEMINI_API_KEY=your_api_key_here
-```
-
-**Note**: The AI analysis feature is optional. The app works perfectly without it, but you'll need the API key to use the "Analyze Artifact" feature.
+No configuration needed! The app works out of the box. Just install dependencies and run.
 
 ## 📦 Project Structure
 
@@ -104,8 +91,6 @@ neuroglitch/
 ├── components/
 │   ├── Controls.tsx      # Parameter controls panel
 │   └── Dropzone.tsx      # Image upload component
-├── services/
-│   └── gemini.ts         # Gemini AI integration
 ├── utils/
 │   └── imageProcessing.ts # Core ASCII conversion logic
 ├── App.tsx               # Main application component
@@ -118,7 +103,6 @@ neuroglitch/
 1. **Upload an Image**: Drag & drop or click to browse for an image file
 2. **Adjust Parameters**: Use the controls to fine-tune the visual output
 3. **Export**: Click "EXPORT PNG" to download your creation
-4. **Analyze**: Use "ANALYZE_ARTIFACT" to get an AI-powered interpretation
 
 ## 🤝 Contributing
 
@@ -131,7 +115,7 @@ This project is open source and available under the [MIT License](LICENSE).
 ## 🙏 Acknowledgments
 
 - Built with React and Vite
-- AI analysis powered by Google Gemini
+- Built with modern web technologies
 - Font: Space Mono
 
 ---

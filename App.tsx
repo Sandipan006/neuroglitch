@@ -3,14 +3,11 @@ import Dropzone from './components/Dropzone';
 import Controls from './components/Controls';
 import { renderCombined } from './utils/imageProcessing';
 import { ProcessSettings, DEFAULT_SETTINGS } from './types';
-import { analyzeImageArt } from './services/gemini';
 
 const App: React.FC = () => {
   const [sourceImage, setSourceImage] = useState<HTMLImageElement | null>(null);
   const [settings, setSettings] = useState<ProcessSettings>(DEFAULT_SETTINGS);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [aiAnalysis, setAiAnalysis] = useState<string>("");
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
   
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -33,7 +30,6 @@ const App: React.FC = () => {
 
   const handleImageLoaded = (img: HTMLImageElement) => {
     setSourceImage(img);
-    setAiAnalysis(""); // Reset AI text on new image
   };
 
   const updateSetting = useCallback(<K extends keyof ProcessSettings>(key: K, value: ProcessSettings[K]) => {
@@ -43,7 +39,6 @@ const App: React.FC = () => {
   const handleReset = () => {
     setSettings(DEFAULT_SETTINGS);
     setSourceImage(null);
-    setAiAnalysis("");
   };
 
   const handleDownload = () => {
@@ -54,15 +49,6 @@ const App: React.FC = () => {
     link.click();
   };
 
-  const triggerAiAnalysis = async () => {
-      if (!canvasRef.current) return;
-      setIsAnalyzing(true);
-      setAiAnalysis("Interfacing with neural net...");
-      
-      const dataUrl = canvasRef.current.toDataURL('image/png');
-      await analyzeImageArt(dataUrl, setAiAnalysis);
-      setIsAnalyzing(false);
-  };
 
   return (
     <div className="flex h-dvh w-screen bg-black text-white font-sans overflow-hidden relative">
@@ -104,19 +90,19 @@ const App: React.FC = () => {
         <div className="flex-1 overflow-y-auto md:overflow-hidden relative flex flex-col md:flex-row gap-4">
           
           {/* Canvas / Dropzone Area */}
-          <div className="flex-1 w-full min-h-[50vh] md:h-full flex flex-col items-center justify-start md:justify-center px-4 pt-8 md:pt-24 pb-8 md:p-8 relative shrink-0">
+          <div className="flex-1 w-full min-h-[50vh] md:h-full flex flex-col items-center justify-center px-4 pt-8 pb-8 md:pt-0 md:pb-0 relative shrink-0">
             
             {!sourceImage ? (
               <div className="w-full max-w-xl z-10 animate-fade-in-up">
                  <Dropzone onImageLoaded={handleImageLoaded} />
               </div>
             ) : (
-              <div className="relative w-full h-full flex items-center justify-center animate-fade-in min-h-[300px]">
+              <div className="relative w-full h-full flex items-center justify-center animate-fade-in md:min-h-0 min-h-[300px]">
                   {/* The Canvas Container */}
                   <div className="relative max-w-full max-h-full flex items-center justify-center shadow-2xl shadow-black/50 border border-neutral-800 bg-black">
                       <canvas 
                           ref={canvasRef}
-                          className="max-w-full max-h-[80vh] md:max-h-full object-contain block"
+                          className="max-w-full max-h-[80vh] md:max-h-[calc(100vh-5rem)] object-contain block"
                           style={{ imageRendering: 'pixelated' }}
                       />
                       
@@ -146,26 +132,6 @@ const App: React.FC = () => {
 
         </div>
 
-        {/* Bottom Bar / AI Interaction (Fixed on Desktop, part of flow logic or fixed on mobile) */}
-        {sourceImage && (
-            <div className="h-14 shrink-0 border-t border-neutral-800 bg-neutral-900/90 backdrop-blur px-6 flex items-center gap-4 z-40 md:static fixed bottom-0 left-0 right-0 w-full">
-                 <button
-                    onClick={triggerAiAnalysis}
-                    disabled={isAnalyzing}
-                    className="px-4 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-cyan-400 text-[10px] font-mono font-bold border border-neutral-700 hover:border-cyan-500/50 rounded transition-all disabled:opacity-50 whitespace-nowrap tracking-wider uppercase"
-                 >
-                    {isAnalyzing ? "SCANNING..." : "ANALYZE_ARTIFACT"}
-                 </button>
-                 <div className="h-4 w-px bg-neutral-700 mx-2"></div>
-                 <p className="text-xs font-mono text-neutral-400 truncate flex-1">
-                    {aiAnalysis ? (
-                        <span className="animate-fade-in text-cyan-100">{aiAnalysis}</span>
-                    ) : (
-                        <span className="opacity-30">/// Awaiting Neural Link...</span>
-                    )}
-                 </p>
-            </div>
-        )}
 
         {/* Background Grid Decoration */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.04] z-0 mix-blend-screen fixed" 
@@ -181,7 +147,7 @@ const App: React.FC = () => {
 
       {/* Mobile Fixed Action Buttons (Reset & Export) - Outside main for proper fixed positioning */}
       {sourceImage && (
-          <div className="md:hidden fixed bottom-14 left-0 right-0 w-full h-16 shrink-0 border-t border-neutral-800 bg-neutral-900/95 backdrop-blur px-4 flex items-center gap-3 z-[100]">
+          <div className="md:hidden fixed bottom-0 left-0 right-0 w-full h-16 shrink-0 border-t border-neutral-800 bg-neutral-900/95 backdrop-blur px-4 flex items-center gap-3 z-[100]">
               <button
                   onClick={handleReset}
                   className="flex-1 py-3 border border-neutral-700 text-neutral-400 text-sm font-bold rounded hover:bg-neutral-800 hover:text-white transition-colors font-mono"
