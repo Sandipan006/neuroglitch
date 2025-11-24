@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import Dropzone from './components/Dropzone';
 import Controls from './components/Controls';
 import { renderCombined } from './utils/imageProcessing';
@@ -163,6 +165,8 @@ const App: React.FC = () => {
               </button>
           </div>
       )}
+      <Analytics />
+      <SpeedInsights />
     </div>
   );
 };
