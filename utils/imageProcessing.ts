@@ -195,3 +195,99 @@ export const renderCombined = (
     }
   }
 };
+
+/**
+ * Procedurally paints a demo scene (sun over mountains and water) so people
+ * can try the effect without having an image at hand.
+ */
+export const createSampleImage = (): Promise<HTMLImageElement> => {
+  const w = 1200;
+  const h = 800;
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return Promise.reject(new Error('Canvas unavailable'));
+
+  const horizon = h * 0.62;
+
+  // Sky
+  const sky = ctx.createLinearGradient(0, 0, 0, horizon);
+  sky.addColorStop(0, '#07051a');
+  sky.addColorStop(0.55, '#3b1360');
+  sky.addColorStop(1, '#ff6a3d');
+  ctx.fillStyle = sky;
+  ctx.fillRect(0, 0, w, horizon);
+
+  // Stars
+  for (let i = 0; i < 160; i++) {
+    const a = Math.random() * 0.8 + 0.2;
+    ctx.fillStyle = `rgba(255,255,255,${a})`;
+    ctx.fillRect(Math.random() * w, Math.random() * horizon * 0.6, 2, 2);
+  }
+
+  // Sun with retro cut bars
+  const cx = w / 2;
+  const cy = horizon - 40;
+  const r = 230;
+  const sun = ctx.createLinearGradient(0, cy - r, 0, cy + r);
+  sun.addColorStop(0, '#fff6b0');
+  sun.addColorStop(0.5, '#ffb347');
+  sun.addColorStop(1, '#ff3d7f');
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.clip();
+  ctx.fillStyle = sun;
+  ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+  for (let i = 0; i < 7; i++) {
+    const y = cy + 10 + i * 30;
+    ctx.clearRect(cx - r, y, r * 2, 4 + i * 2.2);
+  }
+  ctx.restore();
+  // Re-fill the cleared bars with sky colour
+  ctx.globalCompositeOperation = 'destination-over';
+  ctx.fillStyle = sky;
+  ctx.fillRect(0, 0, w, horizon);
+  ctx.globalCompositeOperation = 'source-over';
+
+  // Mountains
+  const ridge = (base: number, amp: number, color: string, seed: number) => {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(0, horizon);
+    for (let x = 0; x <= w; x += 20) {
+      // Flatten the ridge near the centre so the sun stays visible
+      const falloff = Math.min(1, Math.abs(x - cx) / 420);
+      const y = base - (Math.abs(Math.sin(x * 0.006 + seed) * amp) + Math.sin(x * 0.021 + seed * 2) * amp * 0.25) * falloff;
+      ctx.lineTo(x, y);
+    }
+    ctx.lineTo(w, horizon);
+    ctx.closePath();
+    ctx.fill();
+  };
+  ridge(horizon - 10, 150, '#2a0f45', 1.3);
+  ridge(horizon, 90, '#12061f', 4.1);
+
+  // Water
+  const water = ctx.createLinearGradient(0, horizon, 0, h);
+  water.addColorStop(0, '#1b0b33');
+  water.addColorStop(1, '#030208');
+  ctx.fillStyle = water;
+  ctx.fillRect(0, horizon, w, h - horizon);
+
+  // Sun reflection
+  for (let i = 0; i < 26; i++) {
+    const y = horizon + 8 + i * 11;
+    const spread = r * (1 - i / 30) * (0.6 + Math.random() * 0.5);
+    ctx.fillStyle = `rgba(255, ${170 - i * 4}, ${90 + i * 3}, ${0.9 - i * 0.03})`;
+    ctx.fillRect(cx - spread, y, spread * 2, 3 + (i % 3));
+  }
+
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = canvas.toDataURL('image/png');
+  });
+};

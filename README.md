@@ -17,6 +17,8 @@
 - **Particle Effects**: Add glowing particle overlays for that extra cyberpunk vibe
 - **Responsive Design**: Works beautifully on desktop and mobile devices
 - **Export Functionality**: Download your creations as high-quality PNG files
+- **Paste & Sample**: Paste an image straight from your clipboard, or try the built-in sample scene
+- **Hold to Compare**: Press and hold to peek at the original photo under the ASCII render
 - **No API Keys Required**: Works out of the box with no external dependencies
 
 ## 📸 Screenshots
@@ -62,8 +64,8 @@ npm run dev
 - **Particle Intensity**: Control the frequency of glowing particle effects
 - **Base Cutoff**: Filter background noise and dark areas
 - **Highlight Cutoff**: Set brightness threshold for particle appearance
-- **Font Size**: Scale the ASCII character size
-- **Char Palette**: Choose from encryption, standard, or complex character sets
+- **Glyph Size**: Scale the ASCII character size
+- **Glyphs**: Choose from encryption, standard, or complex character sets
 - **Color Mode**: Switch between mono, spectral, cyber, or original color schemes
 
 ## 🛠️ Tech Stack
@@ -71,7 +73,7 @@ npm run dev
 - **React 19** - UI framework
 - **TypeScript** - Type safety
 - **Vite** - Build tool and dev server
-- **Tailwind CSS** - Styling
+- **Tailwind CSS** - Styling (compiled via PostCSS)
 - **HTML5 Canvas** - Image processing and rendering
 
 ## 📝 Scripts
@@ -116,7 +118,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 - Built with React and Vite
 - Built with modern web technologies
-- Font: Space Mono
+- Fonts: Instrument Serif, Inter Tight, Space Mono
 
 ---
 
